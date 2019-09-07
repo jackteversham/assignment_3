@@ -7,10 +7,11 @@ import java.util.Vector;
 
 public class CloudData {
 
-	Vector[][][] advection; // in-plane regular grid of wind vectors, that evolve over time
+	public windVector[][][] advection; // in-plane regular grid of windVector vectors, that evolve over time
 	float [][][] convection; // vertical air movement strength, that evolves over time
 	int [][][] classification; // cloud type per grid point, evolving over time
 	int dimx, dimy, dimt; // data dimensions
+    public static windVector [] vectorArray;
 
 	// overall number of elements in the timeline grids
 	int dim(){
@@ -34,17 +35,22 @@ public class CloudData {
 			dimt = sc.nextInt();
 			dimx = sc.nextInt(); 
 			dimy = sc.nextInt();
+
+            vectorArray = new windVector[dim()]; //initiliase array of vectors, length is equal to total elements in timeline grids
+            int count=0; //keeps track of index of vectorArray
 			
-			// initialize and load advection (wind direction and strength) and convection
-			advection = new Vector[dimt][dimx][dimy];
+			// initialize and load advection (windVector direction and strength) and convection
+			advection = new windVector[dimt][dimx][dimy];
 			convection = new float[dimt][dimx][dimy];
 			for(int t = 0; t < dimt; t++)
 				for(int x = 0; x < dimx; x++)
 					for(int y = 0; y < dimy; y++){
-						advection[t][x][y] = new Vector();
+						advection[t][x][y] = new windVector();
 						advection[t][x][y].x = sc.nextFloat();
 						advection[t][x][y].y = sc.nextFloat();
 						convection[t][x][y] = sc.nextFloat();
+						vectorArray[count] = advection[t][x][y];
+						count++;
 					}
 			classification = new int[dimt][dimx][dimy];
 			sc.close(); 
@@ -60,8 +66,9 @@ public class CloudData {
 	}
 	
 	// write classification output to file
-	void writeData(String fileName, Vector wind){
-		 try{ 
+	void writeData(String fileName, windVector wind){
+		 try{
+
 			 FileWriter fileWriter = new FileWriter(fileName);
 			 PrintWriter printWriter = new PrintWriter(fileWriter);
 			 printWriter.printf("%d %d %d\n", dimt, dimx, dimy);
