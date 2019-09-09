@@ -84,6 +84,8 @@ public class windThread extends RecursiveTask<resultObject> {
         double x_av = 0.0;
         double y_av = 0.0;
 
+
+
         if (boundaryClassification==5){ //topLeft
             x_av = (vectorArray[index].x + vectorArray[index+1].x + vectorArray[index+cloudData.dimy].x + vectorArray[index+cloudData.dimy +1].x)/4.0;
             y_av = (vectorArray[index].y + vectorArray[index+1].y + vectorArray[index+cloudData.dimy].y + vectorArray[index+cloudData.dimy +1].y)/4.0;
@@ -135,8 +137,8 @@ public class windThread extends RecursiveTask<resultObject> {
             x_av = (vectorArray[index].x + vectorArray[index+1].x + vectorArray[index-1].x+ vectorArray[index-cloudData.dimy].x
                     + vectorArray[index-cloudData.dimy-1].x + vectorArray[index-cloudData.dimy+1].x)/6.0;
 
-            y_av= (vectorArray[index].y + vectorArray[index].y + vectorArray[index-1].y+ vectorArray[index-cloudData.dimy].y
-                    + vectorArray[index-cloudData.dimy].y + vectorArray[index-cloudData.dimy+1].y)/6.0;
+            y_av = (vectorArray[index].y + vectorArray[index+1].y + vectorArray[index-1].y+ vectorArray[index-cloudData.dimy].y
+                    + vectorArray[index-cloudData.dimy-1].y + vectorArray[index-cloudData.dimy+1].y)/6.0;
 
         } else{ //normal - vector doesn't lie on any boundary.
 
@@ -167,13 +169,14 @@ public class windThread extends RecursiveTask<resultObject> {
 
 
 
-        if (index == 5242855){
-            System.out.println("FOR 5242855:\n\n");
+      /*  if (index == 5242827){
+            System.out.println("FOR 5242827:\n\n");
             System.out.println(cloudClassifier.classification[coords[0]][coords[1]][coords[2]]+" is the classification");
             System.out.println(lenLocalAverage+" local average thread");
             System.out.println(Math.abs(convection)+" convection in thread");
             System.out.println("\n");
             System.out.println("\n");
+
 
 
 
@@ -205,7 +208,9 @@ public class windThread extends RecursiveTask<resultObject> {
             // cloudData.classification[coords[0]][coords[1]][coords[2]] = 2;
 
             if(lenLocalAverage>0.2 && (float)lenLocalAverage>=Math.abs(convection)){
+                System.out.println(lenLocalAverage+"local average THREAD");
                 System.out.println("CLASSIFICATION: "+1);
+                System.out.println(Math.abs(convection)+" convection in THREAD");
 
             }
             else if (Math.abs(convection)>(float)lenLocalAverage){
@@ -216,7 +221,7 @@ public class windThread extends RecursiveTask<resultObject> {
 
             }
 
-        }
+        }*/
 
     }
 

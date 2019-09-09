@@ -57,9 +57,9 @@ public class cloudClassifier {
         System.out.println(x_average);
         System.out.println(y_average);
 
-        System.out.println("convection: "+ cloudData.convection[2][1][0]);
-        int[] coords = new int[3];
-        int index = 5242855;
+     //   System.out.println("convection: "+ cloudData.convection[2][1][0]);
+    /*    int[] coords = new int[3];
+        int index = 5242827;
 
 
         double x_av = (vectorArray[index].x + vectorArray[index+1].x + vectorArray[index-1].x+ vectorArray[index-cloudData.dimy].x
@@ -67,6 +67,7 @@ public class cloudClassifier {
 
         double y_av= (vectorArray[index].y + vectorArray[index].y + vectorArray[index-1].y+ vectorArray[index-cloudData.dimy].y
                 + vectorArray[index-cloudData.dimy].y + vectorArray[index-cloudData.dimy+1].y)/6.0;
+
         cloudData.locate(index,coords);
 
         float convection = cloudData.convection[coords[0]][coords[1]][coords[2]];
@@ -75,8 +76,9 @@ public class cloudClassifier {
        // cloudData.classification[coords[0]][coords[1]][coords[2]] = 2;
 
         if(lenLocalAverage>0.2 && (float)lenLocalAverage>=Math.abs(convection)){
+            System.out.println(lenLocalAverage+"local average main");
             System.out.println("classification: "+1);
-
+            System.out.println(Math.abs(convection)+" convection in main");
         }
         else if (Math.abs(convection)>(float)lenLocalAverage){
 
@@ -108,7 +110,7 @@ public class cloudClassifier {
             //System.out.println("X: "+coords[1]+" Y: "+coords[2]);
            // System.out.println(vectorArray[i].boundaryClassification);
       //  }
-
+*/
 
         result.cloudDataObject.writeData(outputFile,x_average, y_average);
 
