@@ -81,71 +81,76 @@ public class windThread extends RecursiveTask<resultObject> {
 
         windVector localVector = new windVector();
 
+        double x_av = 0.0;
+        double y_av = 0.0;
+
         if (boundaryClassification==5){ //topLeft
-            localVector.x = (vectorArray[index].x + vectorArray[index+1].x + vectorArray[index+cloudData.dimy].x + vectorArray[index+cloudData.dimy +1].x)/4.0;
-            localVector.y = (vectorArray[index].y + vectorArray[index+1].y + vectorArray[index+cloudData.dimy].y + vectorArray[index+cloudData.dimy +1].y)/4.0;
+            x_av = (vectorArray[index].x + vectorArray[index+1].x + vectorArray[index+cloudData.dimy].x + vectorArray[index+cloudData.dimy +1].x)/4.0;
+            y_av = (vectorArray[index].y + vectorArray[index+1].y + vectorArray[index+cloudData.dimy].y + vectorArray[index+cloudData.dimy +1].y)/4.0;
 
         }
         else if(boundaryClassification==6){//topRight
 
-            localVector.x= (vectorArray[index].x + vectorArray[index-1].x + vectorArray[index+cloudData.dimy].x + vectorArray[index+cloudData.dimy-1].x)/4.0;
-            localVector.y = (vectorArray[index].y + vectorArray[index-1].y + vectorArray[index+cloudData.dimy].y + vectorArray[index+cloudData.dimy-1].y)/4.0;
+            x_av= (vectorArray[index].x + vectorArray[index-1].x + vectorArray[index+cloudData.dimy].x + vectorArray[index+cloudData.dimy-1].x)/4.0;
+            y_av = (vectorArray[index].y + vectorArray[index-1].y + vectorArray[index+cloudData.dimy].y + vectorArray[index+cloudData.dimy-1].y)/4.0;
 
         }
         else if (boundaryClassification==7){ //bottomLeft
-            localVector.x  = (vectorArray[index].x + vectorArray[index+1].x + vectorArray[index-cloudData.dimy].x + vectorArray[index-cloudData.dimy+1].x)/4.0;
-            localVector.y = (vectorArray[index].y + vectorArray[index+1].y + vectorArray[index-cloudData.dimy].y + vectorArray[index-cloudData.dimy+1].y)/4.0;
+            x_av  = (vectorArray[index].x + vectorArray[index+1].x + vectorArray[index-cloudData.dimy].x + vectorArray[index-cloudData.dimy+1].x)/4.0;
+            y_av = (vectorArray[index].y + vectorArray[index+1].y + vectorArray[index-cloudData.dimy].y + vectorArray[index-cloudData.dimy+1].y)/4.0;
 
         }else if(boundaryClassification==8){ //bottomRight
 
-            localVector.x = (vectorArray[index].x + vectorArray[index-1].x + vectorArray[index-cloudData.dimy].x + vectorArray[index-cloudData.dimy-1].x)/4.0;
-            localVector.y = (vectorArray[index].y + vectorArray[index-1].y + vectorArray[index-cloudData.dimy].y + vectorArray[index-cloudData.dimy-1].y)/4.0;
+            x_av = (vectorArray[index].x + vectorArray[index-1].x + vectorArray[index-cloudData.dimy].x + vectorArray[index-cloudData.dimy-1].x)/4.0;
+            y_av = (vectorArray[index].y + vectorArray[index-1].y + vectorArray[index-cloudData.dimy].y + vectorArray[index-cloudData.dimy-1].y)/4.0;
 
         }else if(boundaryClassification==1){ //Left boundary
 
-            localVector.x= (vectorArray[index].x + vectorArray[index+1].x + vectorArray[index+cloudData.dimy].x+ vectorArray[index+cloudData.dimy+1].x
+            x_av= (vectorArray[index].x + vectorArray[index+1].x + vectorArray[index+cloudData.dimy].x+ vectorArray[index+cloudData.dimy+1].x
                     + vectorArray[index-cloudData.dimy].x + vectorArray[index-cloudData.dimy+1].x)/6.0;
-            localVector.y = (vectorArray[index].y + vectorArray[index+1].y + vectorArray[index+cloudData.dimy].y+ vectorArray[index+cloudData.dimy+1].y
+            y_av = (vectorArray[index].y + vectorArray[index+1].y + vectorArray[index+cloudData.dimy].y+ vectorArray[index+cloudData.dimy+1].y
                     + vectorArray[index-cloudData.dimy].y + vectorArray[index-cloudData.dimy+1].y)/6.0;
 
 
         }
         else if(boundaryClassification==2) { //top boundary
 
-            localVector.x = (vectorArray[index].x + vectorArray[index+1].x + vectorArray[index-1].x+ vectorArray[index+cloudData.dimy].x
+            x_av = (vectorArray[index].x + vectorArray[index+1].x + vectorArray[index-1].x+ vectorArray[index+cloudData.dimy].x
                     + vectorArray[index+cloudData.dimy-1].x + vectorArray[index+cloudData.dimy+1].x)/6.0;
-            localVector.y = (vectorArray[index].y + vectorArray[index+1].y + vectorArray[index-1].y+ vectorArray[index+cloudData.dimy].y
-                    + vectorArray[index+cloudData.dimy].y + vectorArray[index+cloudData.dimy+1].y)/6.0;
+
+            y_av = (vectorArray[index].y + vectorArray[index+1].y + vectorArray[index-1].y+ vectorArray[index+cloudData.dimy].y
+                    + vectorArray[index+cloudData.dimy-1].y + vectorArray[index+cloudData.dimy+1].y)/6.0;
 
         }
         else if (boundaryClassification == 3) { //right boundary
 
-            localVector.x = (vectorArray[index].x + vectorArray[index-1].x + vectorArray[index+cloudData.dimy].x+ vectorArray[index+cloudData.dimy-1].x
+            x_av = (vectorArray[index].x + vectorArray[index-1].x + vectorArray[index+cloudData.dimy].x+ vectorArray[index+cloudData.dimy-1].x
                     + vectorArray[index-cloudData.dimy].x + vectorArray[index-cloudData.dimy-1].x)/6.0;
-            localVector.y = (vectorArray[index].y + vectorArray[index-1].y + vectorArray[index+cloudData.dimy].y+ vectorArray[index+cloudData.dimy-1].y
+            y_av = (vectorArray[index].y + vectorArray[index-1].y + vectorArray[index+cloudData.dimy].y+ vectorArray[index+cloudData.dimy-1].y
                     + vectorArray[index-cloudData.dimy].y + vectorArray[index-cloudData.dimy-1].y)/6.0;
 
 
         } else if(boundaryClassification==4){//bottom boundary
 
-            localVector.x = (vectorArray[index].x + vectorArray[index+1].x + vectorArray[index-1].x+ vectorArray[index-cloudData.dimy].x
+            x_av = (vectorArray[index].x + vectorArray[index+1].x + vectorArray[index-1].x+ vectorArray[index-cloudData.dimy].x
                     + vectorArray[index-cloudData.dimy-1].x + vectorArray[index-cloudData.dimy+1].x)/6.0;
-            localVector.y = (vectorArray[index].y + vectorArray[index].y + vectorArray[index-1].y+ vectorArray[index-cloudData.dimy].y
+
+            y_av= (vectorArray[index].y + vectorArray[index].y + vectorArray[index-1].y+ vectorArray[index-cloudData.dimy].y
                     + vectorArray[index-cloudData.dimy].y + vectorArray[index-cloudData.dimy+1].y)/6.0;
 
         } else{ //normal - vector doesn't lie on any boundary.
 
-            localVector.x = (vectorArray[index].x + vectorArray[index+1].x + vectorArray[index-1].x+ vectorArray[index-cloudData.dimy].x
+            x_av = (vectorArray[index].x + vectorArray[index+1].x + vectorArray[index-1].x+ vectorArray[index-cloudData.dimy].x
                     + vectorArray[index-cloudData.dimy-1].x + vectorArray[index-cloudData.dimy+1].x
                     +vectorArray[index+cloudData.dimy].x+vectorArray[index+cloudData.dimy-1].x+vectorArray[index+cloudData.dimy+1].x)/9.0;
-            localVector.y = (vectorArray[index].y + vectorArray[index+1].y + vectorArray[index-1].y+ vectorArray[index-cloudData.dimy].y
+            y_av = (vectorArray[index].y + vectorArray[index+1].y + vectorArray[index-1].y+ vectorArray[index-cloudData.dimy].y
                     + vectorArray[index-cloudData.dimy-1].y + vectorArray[index-cloudData.dimy+1].y
                     +vectorArray[index+cloudData.dimy].y+vectorArray[index+cloudData.dimy-1].y+vectorArray[index+cloudData.dimy+1].y)/9.0;
 
 
         }
 
-        double lenLocalAverage = Math.sqrt((localVector.x*localVector.x)+(localVector.y*localVector.y));
+        double lenLocalAverage = Math.sqrt((x_av*x_av)+(y_av*y_av));
 
         cloudClassifier.classification[coords[0]][coords[1]][coords[2]] = 2;
 
@@ -158,10 +163,59 @@ public class windThread extends RecursiveTask<resultObject> {
             cloudClassifier.classification[coords[0]][coords[1]][coords[2]] = 0;
 
         }
-        if (coords[0]==0&&coords[1]==0&&coords[2]==13){
+
+
+
+
+        if (index == 5242855){
+            System.out.println("FOR 5242855:\n\n");
             System.out.println(cloudClassifier.classification[coords[0]][coords[1]][coords[2]]+" is the classification");
             System.out.println(lenLocalAverage+" local average thread");
             System.out.println(Math.abs(convection)+" convection in thread");
+            System.out.println("\n");
+            System.out.println("\n");
+
+
+
+
+
+            System.out.println(vectorArray[index].x);
+            System.out.println(vectorArray[index+1].x );
+            System.out.println(vectorArray[index-1].x);
+            System.out.println(vectorArray[index-cloudData.dimy].x);
+            System.out.println(vectorArray[index-cloudData.dimy-1].x);
+            System.out.println(vectorArray[index-cloudData.dimy+1].x);
+
+
+
+
+
+
+            x_av = (vectorArray[index].x + vectorArray[index+1].x + vectorArray[index-1].x+ vectorArray[index-cloudData.dimy].x
+                    + vectorArray[index-cloudData.dimy-1].x + vectorArray[index-cloudData.dimy+1].x)/6.0;
+
+            y_av= (vectorArray[index].y + vectorArray[index].y + vectorArray[index-1].y+ vectorArray[index-cloudData.dimy].y
+                    + vectorArray[index-cloudData.dimy].y + vectorArray[index-cloudData.dimy+1].y)/6.0;
+
+            cloudData.locate(index,coords);
+
+            //float convection = cloudData.convection[coords[0]][coords[1]][coords[2]];
+             lenLocalAverage = Math.sqrt((x_av*x_av)+(y_av*y_av));
+
+            // cloudData.classification[coords[0]][coords[1]][coords[2]] = 2;
+
+            if(lenLocalAverage>0.2 && (float)lenLocalAverage>=Math.abs(convection)){
+                System.out.println("CLASSIFICATION: "+1);
+
+            }
+            else if (Math.abs(convection)>(float)lenLocalAverage){
+
+                System.out.println(lenLocalAverage+"local average THREAD");
+                System.out.println("CLASSIFICATION: "+0);
+                System.out.println(Math.abs(convection)+" convection in THREAD");
+
+            }
+
         }
 
     }

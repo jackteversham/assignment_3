@@ -59,13 +59,15 @@ public class cloudClassifier {
 
         System.out.println("convection: "+ cloudData.convection[2][1][0]);
         int[] coords = new int[3];
+        int index = 5242855;
 
-        double x_av = (vectorArray[13].x + vectorArray[13+1].x + vectorArray[13-1].x+ vectorArray[13+cloudData.dimy].x
-                + vectorArray[13+cloudData.dimy-1].x + vectorArray[13+cloudData.dimy+1].x)/6.0;
 
-        double y_av = (vectorArray[13].y + vectorArray[13+1].y + vectorArray[13-1].y+ vectorArray[13+cloudData.dimy].y
-                + vectorArray[13+cloudData.dimy-1].y + vectorArray[13+cloudData.dimy+1].y)/6.0;
-        cloudData.locate(13,coords);
+        double x_av = (vectorArray[index].x + vectorArray[index+1].x + vectorArray[index-1].x+ vectorArray[index-cloudData.dimy].x
+                + vectorArray[index-cloudData.dimy-1].x + vectorArray[index-cloudData.dimy+1].x)/6.0;
+
+        double y_av= (vectorArray[index].y + vectorArray[index].y + vectorArray[index-1].y+ vectorArray[index-cloudData.dimy].y
+                + vectorArray[index-cloudData.dimy].y + vectorArray[index-cloudData.dimy+1].y)/6.0;
+        cloudData.locate(index,coords);
 
         float convection = cloudData.convection[coords[0]][coords[1]][coords[2]];
         double lenLocalAverage = Math.sqrt((x_av*x_av)+(y_av*y_av));
@@ -80,13 +82,22 @@ public class cloudClassifier {
 
             System.out.println(lenLocalAverage+"local average main");
             System.out.println("classification: "+0);
-            System.out.println(Math.abs(convection)+" convection in thread");
+            System.out.println(Math.abs(convection)+" convection in main");
 
         }
         System.out.println(coords[0]);
         System.out.println(coords[1]);
         System.out.println(coords[2]);
-        System.out.println(classification[0][0][13]);
+        System.out.println(classification[coords[0]][coords[1]][coords[2]]);
+        System.out.println("\n");
+
+        System.out.println(vectorArray[index].x);
+        System.out.println(vectorArray[index+1].x );
+        System.out.println(vectorArray[index-1].x);
+        System.out.println(vectorArray[index-cloudData.dimy].x);
+        System.out.println(vectorArray[index-cloudData.dimy-1].x);
+        System.out.println(vectorArray[index-cloudData.dimy+1].x);
+
 
 
 
