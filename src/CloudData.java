@@ -105,10 +105,6 @@ public class CloudData {
 		 }
 	}
 
-	/*public static int [][][] getClassification(){
-		return classification;
-	}*/
-
 
     /**
      * This function classifies each vector as a left boundary, right boundary, top boundary or bottom boundary vector

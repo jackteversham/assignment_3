@@ -6,25 +6,31 @@ import java.util.concurrent.RecursiveTask;
  * Created by jackteversham on 2019/09/06.
  */
 public class windThread extends RecursiveTask<resultObject> {
-    int dimx = cloudClassifier.dimx;
-    int dimy = cloudClassifier.dimy;
-    int dimt = cloudClassifier.dimt;
+    static int dimx;
+    static int dimy;
+    static int dimt;
 
-    float [][][] convection = cloudClassifier.convection; // vertical air movement strength, that evolves over time
-    static int [][][] classification = cloudClassifier.classification; // cloud type per grid point, evolving over time
+    static float [][][] convection; // vertical air movement strength, that evolves over time
+    static int [][][] classification; // cloud type per grid point, evolving over time
 
 
-    private static final int SEQUENTIAL_CUTOFF = 20000; //value of 3 for testing small data
+    private static int SEQUENTIAL_CUTOFF; //value of 3 for testing small data
     int lo; int hi; //recursively splitting the array of vectors using these bounds
     windVector [] vectorArray; //our array of vectors to be operated on
 
     resultObject result = new resultObject(new CloudData(dimx, dimy, dimt, convection, classification), new windVector());
 
-
-    windThread(int l, int h, windVector [] vecArray){
+    windThread(){}
+    windThread(int l, int h, windVector [] vecArray, int t, int x, int y, float [][][] connvection, int [][][] classification, int sequential_cutoff){
         this.lo = l;
         this.hi = h;
         this.vectorArray = vecArray;
+        this.dimx = x;
+        this.dimt = t;
+        this.dimy = y;
+        this.convection = connvection;
+        this.classification = classification;
+        this.SEQUENTIAL_CUTOFF = sequential_cutoff;
     }
 
     protected resultObject compute(){  //the work we want this thread to do in here.
@@ -40,21 +46,17 @@ public class windThread extends RecursiveTask<resultObject> {
         }else{ //PARALLEL - splitting problem up
 
             int mid = (hi+lo)/2;
-            windThread left = new windThread(lo, mid, vectorArray);
-            windThread right = new windThread(mid, hi, vectorArray);
+            windThread left = new windThread(lo, mid, vectorArray, dimt, dimx, dimy, convection, classification, SEQUENTIAL_CUTOFF);
+            windThread right = new windThread(mid, hi, vectorArray, dimt, dimx, dimy, convection, classification, SEQUENTIAL_CUTOFF);
 
-            left.fork(); //send thread away to do task
+            left.fork();
+
+           // resultObject leftAns = left.compute(); //send thread away to do task
             resultObject rightAns = right.compute(); //execute sequentially, returns a vector
             resultObject leftAns = left.join(); //wait for thread to complete, returns a vector
 
             windVector prevWind = leftAns.wind.combine(rightAns.wind);
 
-          /*  int [] coords = new int[3];
-            for (int i =  lo; i < hi; i++) {
-
-                rightAns.cloudDataObject.locate(i,coords);
-                leftAns.cloudDataObject.classification[coords[0]][coords[1]][coords[2]] = rightAns.cloudDataObject.classification[coords[0]][coords[1]][coords[2]];
-            }*/
 
             leftAns.wind = prevWind; //left ans result object updated with prevailing wind and returned.
             return leftAns; //combines the results of the two child thread and returns prevailing wind vector
@@ -154,74 +156,17 @@ public class windThread extends RecursiveTask<resultObject> {
 
         double lenLocalAverage = Math.sqrt((x_av*x_av)+(y_av*y_av));
 
-        cloudClassifier.classification[coords[0]][coords[1]][coords[2]] = 2;
+            classification[coords[0]][coords[1]][coords[2]] = 2;
 
         if(lenLocalAverage>0.2 && (float)lenLocalAverage>=Math.abs(convection)){
-            cloudClassifier.classification[coords[0]][coords[1]][coords[2]] = 1;
+            classification[coords[0]][coords[1]][coords[2]] = 1;
 
         }
         else if (Math.abs(convection)>(float)lenLocalAverage){
 
-            cloudClassifier.classification[coords[0]][coords[1]][coords[2]] = 0;
+            classification[coords[0]][coords[1]][coords[2]] = 0;
 
         }
-
-
-
-
-      /*  if (index == 5242827){
-            System.out.println("FOR 5242827:\n\n");
-            System.out.println(cloudClassifier.classification[coords[0]][coords[1]][coords[2]]+" is the classification");
-            System.out.println(lenLocalAverage+" local average thread");
-            System.out.println(Math.abs(convection)+" convection in thread");
-            System.out.println("\n");
-            System.out.println("\n");
-
-
-
-
-
-
-            System.out.println(vectorArray[index].x);
-            System.out.println(vectorArray[index+1].x );
-            System.out.println(vectorArray[index-1].x);
-            System.out.println(vectorArray[index-cloudData.dimy].x);
-            System.out.println(vectorArray[index-cloudData.dimy-1].x);
-            System.out.println(vectorArray[index-cloudData.dimy+1].x);
-
-
-
-
-
-
-            x_av = (vectorArray[index].x + vectorArray[index+1].x + vectorArray[index-1].x+ vectorArray[index-cloudData.dimy].x
-                    + vectorArray[index-cloudData.dimy-1].x + vectorArray[index-cloudData.dimy+1].x)/6.0;
-
-            y_av= (vectorArray[index].y + vectorArray[index].y + vectorArray[index-1].y+ vectorArray[index-cloudData.dimy].y
-                    + vectorArray[index-cloudData.dimy].y + vectorArray[index-cloudData.dimy+1].y)/6.0;
-
-            cloudData.locate(index,coords);
-
-            //float convection = cloudData.convection[coords[0]][coords[1]][coords[2]];
-             lenLocalAverage = Math.sqrt((x_av*x_av)+(y_av*y_av));
-
-            // cloudData.classification[coords[0]][coords[1]][coords[2]] = 2;
-
-            if(lenLocalAverage>0.2 && (float)lenLocalAverage>=Math.abs(convection)){
-                System.out.println(lenLocalAverage+"local average THREAD");
-                System.out.println("CLASSIFICATION: "+1);
-                System.out.println(Math.abs(convection)+" convection in THREAD");
-
-            }
-            else if (Math.abs(convection)>(float)lenLocalAverage){
-
-                System.out.println(lenLocalAverage+"local average THREAD");
-                System.out.println("CLASSIFICATION: "+0);
-                System.out.println(Math.abs(convection)+" convection in THREAD");
-
-            }
-
-        }*/
 
     }
 
